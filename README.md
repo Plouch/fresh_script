@@ -12,11 +12,25 @@ This project uses Python3. You will need to setup a Spotify developer account an
 * your spotify username
 * playlist id of the playlist you want to add the tracks to
 * the url you want to redirect to for authentication, i.e. http://google.com/
- You will also need to setup a reddit instance with praw. [Heres](https://pythonforengineers.com/build-a-reddit-bot-part-1/) a useful guide I used to do this. 
+ You will also need to setup a reddit instance with praw. [Heres](https://pythonforengineers.com/build-a-reddit-bot-part-1/) a useful guide I used to do this.
+ 
+### Installing dependencies
+This project uses a dependency manager called [pipenv](https://pipenv.readthedocs.io). Follow the instructions to install it [here](https://pipenv.readthedocs.io/en/latest/install/#installing-pipenv).
+
+The project dependencies are listed in a [Pipfile](https://github.com/pypa/pipfile). Using pipenv, you can install all the dependencies with the following commands:
+```bash
+cd fresh_script
+pipenv install
+``` 
+
+Pipenv uses [virtualenv](https://virtualenv.pypa.io/en/stable/) to create a python environment with all the dependencies listed in the Pipfile. Before running the fresh.py script, you must first activate the environment:
+```bash
+pipenv shell
 ```
-pip3 install praw
-pip3 install spotipy
-pip3 install configparser
+
+If you wish to deactivate the environment use the command
+```bash
+exit
 ```
 
 ### Running the script
@@ -26,6 +40,42 @@ Running the program is simple. The first time you run it, you will be asked for 
 ```
 python fresh.py
 ```
+
+### Script arguments
+
+The following arguments can be passed to the script
+
+| Short | Long             | Type | Description |
+|-------|------------------|------|-------------|
+| -s    | --sort           | int  | Sort by hot (1), new (2), rising (3), random rising (4), controversion (5) or top (6) |
+| -l    | --limit          | int  | How many posts to grab |
+| -t    | --threshold      | int  | Only posts with score above threshold |
+| -f    | --fresh          |      | Only add tracks with the \[FRESH\] tag |
+| -ia   | --include-albums |      | Include tracks from albums |
+| -v    | --verbose        |      | Output songs being added and other info |
+
+### Running the script using cron
+
+We can use cron to automatically run the script periodically in order to keep it up-to-date. You will need either a macOS computer or Linux server to use cron.
+
+1. Follow the `running the script` instructions to make sure your `.config.ini` file is generated with the required parameters
+2. Run `crontab -e` to open the cron editor, which is similar to vim
+3. Use the following format to create a line for your cron
+    ```
+    * * * * * command to be executed
+    - - - - -
+    | | | | |
+    | | | | ----- Day of week (0 - 7) (Sunday=0 or 7)
+    | | | ------- Month (1 - 12)
+    | | --------- Day of month (1 - 31)
+    | ----------- Hour (0 - 23)
+    ------------- Minute (0 - 59)
+    ```
+    For example, you would do the following to run this everyday at 9AM
+    ```
+    0 9 * * * python /home/jsmith/fresh.py
+    ```
+
 ## Contributing
 
 I appreciate any help and support. Feel free to [fork](https://github.com/amcquade/fresh_script#fork-destination-box) and [create a pull request](https://github.com/amcquade/fresh_script/compare)
