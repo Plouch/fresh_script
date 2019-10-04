@@ -2,17 +2,43 @@
 
 This program will search for spotify tracks posted in the HipHopHeads subreddit and add them to a playlist of your choice. HipHopHeads is a subreddit dedicated to everything hiphop, including the latest mixtapes, videos, news, and anything else hip hop related from your favorite artists.
 
+## New Features!
+[Flask](http://flask.pocoo.org/) has recently been added to the project. You can read up on how to get it setup [here](flask.md).
+
 ## Getting Started
 
 ### Prerequisites
 
-This project uses Python3. You will need to setup a Spotify developer account and register your app. You will need the following things for this code:
+This project uses Python3.
+
+You will need to setup a Spotify developer account and register your app and obtain the following information:
 * client id
 * client secret
 * your spotify username
 * playlist id of the playlist you want to add the tracks to
 * the url you want to redirect to for authentication, i.e. http://google.com/
- You will also need to setup a reddit instance with praw. [Heres](https://pythonforengineers.com/build-a-reddit-bot-part-1/) a useful guide I used to do this.
+  * this must be added under your app settings > Redirect URIs 
+
+You will also need to setup a reddit instance with praw. [Here's](https://pythonforengineers.com/build-a-reddit-bot-part-1/) a useful guide I used to do this.
+
+### Setup your Credentials
+
+To set up your credentials, create a new file called `credentials.json` in the root of the project with the following contents:
+
+```
+{
+    "spotify": {
+        "username": "[Spotify username]",
+        "client_id": "[Spotify client id]",
+        "client_secret": "[Spotify client secret]",
+        "redirect": "[redirect uri]"
+    },
+    "reddit": {
+        "client_id": "[praw client id]",
+        "client_secret": "[praw client secret]"
+    }
+}
+```
  
 ### Installing dependencies
 This project uses a dependency manager called [pipenv](https://pipenv.readthedocs.io). Follow the instructions to install it [here](https://pipenv.readthedocs.io/en/latest/install/#installing-pipenv).
@@ -38,21 +64,22 @@ exit
 Running the program is simple. The first time you run it, you will be asked for your Spotify credientials which will be saved to a config file for ease of use in the future. Choose to sort results by hot or new, enter a post limit, and then enjoy.
 
 ```
-python fresh.py
+python3 fresh.py
 ```
 
 ### Script arguments
 
 The following arguments can be passed to the script
 
-| Short | Long             | Type | Description |
-|-------|------------------|------|-------------|
-| -s    | --sort           | int  | Sort by hot (1), new (2), rising (3), random rising (4), controversion (5) or top (6) |
-| -l    | --limit          | int  | How many posts to grab |
-| -t    | --threshold      | int  | Only posts with score above threshold |
-| -f    | --fresh          |      | Only add tracks with the \[FRESH\] tag |
-| -ia   | --include-albums |      | Include tracks from albums |
-| -v    | --verbose        |      | Output songs being added and other info |
+| Short | Long             | Type   | Description |
+|-------|------------------|--------|-------------|
+| -s    | --sort           | string | Sort by hot, new, rising, random_rising, controversion or top |
+| -l    | --limit          | int    | How many posts to grab |
+| -t    | --threshold      | int    | Only posts with score above threshold |
+| -f    | --fresh          | bool   | Only add tracks with the \[FRESH\] tag |
+| -ia   | --include-albums | bool   | Include tracks from albums |
+| -v    | --verbose        | bool   | Output songs being added and other info |
+| -p    | --playlists      | bool   | List, add, or remove playlists to add songs to |
 
 ### Running the script using cron
 
